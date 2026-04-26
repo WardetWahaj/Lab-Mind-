@@ -1,0 +1,53 @@
+# Render Blueprint — one-click deploy for the Lab Mind backend.
+# https://render.com/docs/blueprint-spec
+#
+# Usage:
+#   1. Push this repo to GitHub.
+#   2. On Render, click "New +" → "Blueprint" and select this repo.
+#   3. Render reads this file and provisions the service below.
+#   4. After the service is created, open it and set the secret env vars
+#      (GROQ_API_KEY, TAVILY_API_KEY) in the dashboard, then trigger a deploy.
+#
+# Notes:
+#   - rootDir tells Render to treat backend/ as the working directory, so
+#     requirements.txt and main.py are resolved relative to it.
+#   - The free plan spins down after ~15 min of inactivity; the first request
+#     after a sleep takes ~30–50 s to wake. Upgrade to a paid instance for
+#     always-on behaviour.
+
+services:
+  - type: web
+    name: ai-scientist-os-backend
+    runtime: python
+    plan: free
+    rootDir: backend
+    region: oregon            # change if you prefer frankfurt / singapore / ohio
+    branch: main              # change if your default branch is different
+    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT --workers 1 --timeout-keep-alive 65
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: ENV
+        value: production
+      - key: RELOAD
+        value: "0"
+      # Keep-alive: the backend self-pings RENDER_EXTERNAL_URL/api/health every
+      # KEEP_ALIVE_INTERVAL_SECONDS (default 600 s = 10 min) to prevent free-tier
+      # idle sleep. Set KEEP_ALIVE_ENABLED=0 to opt out (e.g. on a paid plan
+      # where it's no longer needed).
+      - key: KEEP_ALIVE_ENABLED
+        value: "1"
+      - key: KEEP_ALIVE_INTERVAL_SECONDS
+        value: "600"
+      # Lock down CORS to your Netlify origin in production. Add additional
+      # origins as a comma-separated list if you have a custom domain too.
+      - key: CORS_ALLOW_ORIGINS
+        sync: false           # you must set this in the Render dashboard
+      # Secrets — set these in the Render dashboard, never commit them.
+      - key: GROQ_API_KEY
+        sync: false
+      - key: TAVILY_API_KEY
+        sync: false

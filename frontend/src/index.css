@@ -1,0 +1,263 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+:root {
+  --color-bg: #fbfbfa;
+  --color-bg-subtle: #f5f7fb;
+  --color-border: #e2e8f0;
+  --color-border-strong: #cbd5e1;
+  --color-text: #0f172a;
+  --color-text-muted: #475569;
+  --color-text-subtle: #64748b;
+  --color-accent: #1d4ed8;
+  --color-accent-hover: #1e3a8a;
+  --color-accent-soft: #eef4ff;
+}
+
+html, body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  font-family: inherit;
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 font-medium rounded-lg transition-all duration-150 select-none;
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 focus-visible:ring-offset-2;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-sm  { @apply text-xs px-3 py-1.5; }
+  .btn-md  { @apply text-sm px-4 py-2.5; }
+  .btn-lg  { @apply text-sm px-5 py-3; }
+
+  .btn-primary {
+    @apply btn btn-md bg-accent-700 text-white hover:bg-accent-800 active:bg-accent-900 shadow-sm;
+  }
+  .btn-primary-lg {
+    @apply btn btn-lg bg-accent-700 text-white hover:bg-accent-800 active:bg-accent-900 shadow-sm;
+  }
+  .btn-secondary {
+    @apply btn btn-md bg-white text-ink-700 border border-slate-200 hover:bg-slate-50 hover:border-slate-300 shadow-sm;
+  }
+  .btn-ghost {
+    @apply btn btn-md text-ink-600 hover:bg-slate-100;
+  }
+  .btn-danger-ghost {
+    @apply btn btn-sm text-rose-700 hover:bg-rose-50;
+  }
+}
+
+/* ==========================================================================
+   Surfaces
+   ========================================================================== */
+
+@layer components {
+  .surface {
+    @apply bg-white border border-slate-200 rounded-xl2 shadow-card;
+  }
+  .surface-hover {
+    @apply transition-shadow hover:shadow-card-hover;
+  }
+  .card {
+    @apply surface p-6;
+  }
+  .card-tight {
+    @apply surface p-4;
+  }
+  .card-section {
+    @apply border-t border-slate-100 pt-5 mt-5;
+  }
+  .divider {
+    @apply h-px bg-slate-200;
+  }
+}
+
+/* ==========================================================================
+   Pills / badges
+   ========================================================================== */
+
+@layer components {
+  .pill {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border whitespace-nowrap;
+  }
+  .pill-neutral { @apply pill bg-slate-50 text-slate-700 border-slate-200; }
+  .pill-accent  { @apply pill bg-accent-50 text-accent-800 border-accent-100; }
+  .pill-success { @apply pill bg-success-50 text-success-800 border-success-100; }
+  .pill-warn    { @apply pill bg-warn-50 text-warn-800 border-warn-100; }
+  .pill-danger  { @apply pill bg-danger-50 text-danger-800 border-danger-100; }
+
+  .pill-dot {
+    @apply inline-block w-1.5 h-1.5 rounded-full;
+  }
+
+  .badge {
+    @apply inline-block px-2.5 py-1 rounded-full text-xs font-medium;
+  }
+  .badge-success { @apply badge bg-success-100 text-success-800; }
+  .badge-warning { @apply badge bg-warn-100 text-warn-800; }
+  .badge-danger  { @apply badge bg-danger-100 text-danger-800; }
+}
+
+/* ==========================================================================
+   Tabs
+   ========================================================================== */
+
+@layer components {
+  .tab {
+    @apply relative px-4 py-3 text-sm font-medium text-slate-600 transition-colors;
+    @apply hover:text-ink-700 focus:outline-none;
+  }
+  .tab[aria-selected="true"] {
+    @apply text-accent-800;
+  }
+  .tab[aria-selected="true"]::after {
+    content: '';
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: -1px;
+    height: 2px;
+    border-radius: 2px;
+    background: theme('colors.accent.700');
+  }
+}
+
+/* ==========================================================================
+   Stage stepper (Input → Literature QC → Plan)
+   ========================================================================== */
+
+@layer components {
+  .stepper {
+    @apply flex items-center gap-2 text-xs;
+  }
+  .stepper-item {
+    @apply flex items-center gap-2;
+  }
+  .stepper-circle {
+    @apply inline-flex items-center justify-center w-6 h-6 rounded-full text-[11px] font-semibold border;
+  }
+  .stepper-state-active   { @apply bg-accent-700 text-white border-accent-700 shadow-sm; }
+  .stepper-state-done     { @apply bg-success-600 text-white border-success-600; }
+  .stepper-state-upcoming { @apply bg-white text-slate-400 border-slate-200; }
+  .stepper-label-active   { @apply text-ink-800 font-semibold; }
+  .stepper-label-done     { @apply text-success-700 font-medium; }
+  .stepper-label-upcoming { @apply text-slate-400 font-medium; }
+  .stepper-rail {
+    @apply h-px w-8 sm:w-12 bg-slate-200 rounded;
+  }
+  .stepper-rail-done {
+    @apply bg-success-500;
+  }
+}
+
+/* ==========================================================================
+   Timeline (protocol steps)
+   ========================================================================== */
+
+@layer components {
+  .protocol-step {
+    @apply relative pl-12 pb-8;
+  }
+  .protocol-step:last-child { @apply pb-0; }
+
+  .protocol-step::before {
+    content: '';
+    position: absolute;
+    left: 14px;
+    top: 32px;
+    bottom: 0;
+    width: 2px;
+    background: theme('colors.slate.200');
+  }
+  .protocol-step:last-child::before { display: none; }
+
+  .protocol-dot {
+    @apply absolute left-0 top-0 inline-flex items-center justify-center;
+    @apply w-7 h-7 rounded-full bg-accent-700 text-white text-[12px] font-semibold;
+    @apply ring-4 ring-white;
+  }
+}
+
+/* ==========================================================================
+   Misc primitives
+   ========================================================================== */
+
+@layer components {
+  .mono {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+    @apply text-[12px] bg-slate-100 text-ink-700 px-1.5 py-0.5 rounded;
+  }
+  .skeleton {
+    @apply animate-pulse bg-slate-200/80 rounded;
+  }
+  .focus-ring {
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 focus-visible:ring-offset-2;
+  }
+  .input {
+    @apply w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-lg text-sm text-ink-800;
+    @apply placeholder:text-slate-400;
+    @apply focus:outline-none focus:ring-2 focus:ring-accent-500 focus:border-accent-500;
+  }
+  .textarea {
+    @apply input resize-y leading-relaxed;
+  }
+  .label {
+    @apply block text-xs font-semibold uppercase tracking-wide text-slate-500;
+  }
+}
+
+/* ==========================================================================
+   Toast
+   ========================================================================== */
+
+@layer components {
+  .toast {
+    @apply fixed top-4 right-4 z-50 max-w-md animate-fade-in;
+    @apply surface px-4 py-3 flex items-start gap-3;
+  }
+  .toast-success {
+    @apply border-success-100 bg-success-50;
+  }
+  .toast-error {
+    @apply border-danger-100 bg-danger-50;
+  }
+}
+
+/* ==========================================================================
+   Print (Export-to-PDF)
+   ========================================================================== */
+
+@media print {
+  body { background: #ffffff !important; }
+  .no-print { display: none !important; }
+  .print-break { page-break-before: always; }
+  .surface, .card { box-shadow: none !important; border-color: #e5e7eb !important; }
+  .stepper { display: none !important; }
+  .tab { display: block !important; }
+  /* Ensure all tabs print */
+  [data-print-all="true"] [data-tab-panel] { display: block !important; }
+}
+
+/* ==========================================================================
+   Scrollbar polish (non-print)
+   ========================================================================== */
+
+.thin-scroll::-webkit-scrollbar { height: 8px; width: 8px; }
+.thin-scroll::-webkit-scrollbar-thumb { background: theme('colors.slate.200'); border-radius: 8px; }
+.thin-scroll::-webkit-scrollbar-thumb:hover { background: theme('colors.slate.300'); }

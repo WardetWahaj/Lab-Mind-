@@ -1,0 +1,38 @@
+[
+  {
+    "hypothesis": "Test a CRISPR-Cas9 knockout of BRCA1 in HEK293 cells.",
+    "experiment_type": "crispr knockout proliferation",
+    "corrections": {
+      "protocol": {
+        "rating": 4,
+        "correction": "Add a Western blot validation step in addition to TIDE/Sanger."
+      },
+      "validation": {
+        "rating": 5,
+        "correction": ""
+      },
+      "budget": {
+        "rating": 3,
+        "correction": "FACS sorting time should be billed as /hr."
+      },
+      "reagents": {
+        "rating": 5,
+        "correction": ""
+      },
+      "timeline": {
+        "rating": 4,
+        "correction": ""
+      }
+    }
+  },
+  {
+    "hypothesis": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "experiment_type": "audit-test",
+    "corrections": {
+      "protocol": {
+        "rating": 5,
+        "correction": "ok"
+      }
+    }
+  }
+]

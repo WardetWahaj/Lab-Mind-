@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import HypothesisInput from './components/HypothesisInput'
 import LiteratureQC from './components/LiteratureQC'
 import ExperimentPlan from './components/ExperimentPlan'
+import ThemeToggle from './components/ThemeToggle'
 
 const STAGES = [
   { id: 'input', label: 'Hypothesis' },
@@ -140,11 +141,11 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-paper text-ink-800">
+    <div className="min-h-screen" style={{ background: 'var(--color-bg)', color: 'var(--color-text)' }}>
       <Header onStartOver={handleStartOver} canReset={state !== 'idle'} />
 
       {/* Stage stepper */}
-      <div className="border-b border-slate-200 bg-white">
+      <div style={{ borderBottom: '1px solid var(--color-border)', background: 'var(--color-bg-subtle)' }}>
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-4 flex-wrap">
           <Stepper state={state} />
           <LearningLoopBanner />
@@ -154,12 +155,12 @@ export default function App() {
       {/* Error toast */}
       {error && (
         <div className="toast toast-error" role="alert">
-          <div className="text-danger-700 mt-0.5">!</div>
+          <div style={{ color: 'var(--color-error)' }} className="mt-0.5">!</div>
           <div className="flex-1">
-            <p className="text-sm font-semibold text-danger-800">Something went wrong</p>
-            <p className="text-xs text-danger-700 mt-0.5">{error}</p>
+            <p className="text-sm font-semibold" style={{ color: 'var(--color-error)' }}>Something went wrong</p>
+            <p className="text-xs mt-0.5" style={{ color: 'var(--color-error)', opacity: 0.8 }}>{error}</p>
           </div>
-          <button onClick={() => setError(null)} className="text-danger-500 hover:text-danger-700 text-sm" aria-label="Dismiss">×</button>
+          <button onClick={() => setError(null)} className="text-sm transition-opacity" style={{ color: 'var(--color-error)', opacity: 0.7 }} aria-label="Dismiss">×</button>
         </div>
       )}
 
@@ -220,20 +221,21 @@ export default function App() {
 
 function Header({ onStartOver, canReset }) {
   return (
-    <header className="bg-ink-900 text-white">
+    <header style={{ background: 'var(--color-bg-elevated)', borderBottom: '1px solid var(--color-border)' }}>
       <div className="max-w-6xl mx-auto px-4 py-5 flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <Logo />
           <div className="leading-tight">
             <div className="text-base sm:text-lg font-bold tracking-tight">Lab Mind</div>
-            <div className="text-[11px] sm:text-xs text-ink-300 font-medium">From hypothesis to runnable experiment plan</div>
+            <div className="text-[11px] sm:text-xs opacity-70 font-medium">From hypothesis to runnable experiment plan</div>
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <span className="hidden sm:inline text-[11px] text-ink-300 uppercase tracking-wider">Powered by</span>
-          <span className="text-xs text-white font-semibold">Fulcrum Science</span>
+          <span className="hidden sm:inline text-[11px] opacity-70 uppercase tracking-wider">Powered by</span>
+          <span className="text-xs font-semibold">Fulcrum Science</span>
+          <ThemeToggle />
           {canReset && (
-            <button onClick={onStartOver} className="ml-3 text-xs text-ink-200 hover:text-white border border-ink-700 hover:border-ink-300 rounded-md px-3 py-1.5 transition-colors">
+            <button onClick={onStartOver} className="ml-2 text-xs opacity-80 hover:opacity-100 border rounded-md px-3 py-1.5 transition-opacity" style={{ borderColor: 'var(--color-border)' }}>
               ↻ Start over
             </button>
           )}
@@ -278,10 +280,10 @@ function Stepper({ state }) {
 
 function LearningLoopBanner() {
   return (
-    <div className="hidden md:flex items-center gap-2 text-[11px] text-success-700">
+    <div className="hidden md:flex items-center gap-2 text-[11px]" style={{ color: 'var(--color-success)' }}>
       <span className="pill-dot bg-success-500 animate-pulse-dot" />
       <span className="font-medium">Live learning loop:</span>
-      <span className="text-success-700/90">Expert feedback is reused to improve the next plan.</span>
+      <span style={{ color: 'var(--color-success)', opacity: 0.9 }}>Expert feedback is reused to improve the next plan.</span>
     </div>
   )
 }
@@ -293,10 +295,10 @@ function Hero() {
         <span className="pill-dot bg-accent-500" />
         Hackathon · Challenge 04
       </div>
-      <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-ink-900">
+      <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">
         Turn a scientific question into a plan a lab can run on Monday.
       </h1>
-      <p className="mt-3 text-slate-600 leading-relaxed">
+      <p className="mt-3 leading-relaxed" style={{ color: 'var(--color-text-muted)' }}>
         Enter a hypothesis. We scan the literature for prior work, then generate a complete,
         operationally grounded experiment plan — protocol, materials with catalog numbers,
         realistic budget, timeline, and validation criteria.
@@ -308,7 +310,7 @@ function Hero() {
 function QCSkeleton() {
   return (
     <div className="card animate-fade-in">
-      <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 mb-4 uppercase tracking-wider">
+      <div className="flex items-center gap-2 text-xs font-semibold mb-4 uppercase tracking-wider" style={{ color: 'var(--color-text-muted)' }}>
         <span className="pill-dot bg-accent-500 animate-pulse-dot" />
         Scanning OpenAlex, Tavily &amp; Semantic Scholar
       </div>
@@ -327,8 +329,8 @@ function EmptyPlanState({ muted = false }) {
     <div className={`card flex items-center justify-center text-center min-h-[420px] ${muted ? 'opacity-70' : ''}`}>
       <div className="max-w-sm">
         <div className="w-12 h-12 mx-auto rounded-full bg-accent-50 text-accent-700 flex items-center justify-center text-xl mb-3">📋</div>
-        <h3 className="text-base font-semibold text-ink-800">Your experiment plan will appear here</h3>
-        <p className="text-sm text-slate-500 mt-1.5 leading-relaxed">
+        <h3 className="text-base font-semibold">Your experiment plan will appear here</h3>
+        <p className="text-sm mt-1.5 leading-relaxed" style={{ color: 'var(--color-text-muted)' }}>
           Enter a hypothesis on the left and run the literature check.
           You'll then be able to generate a full plan in seconds.
         </p>
@@ -342,8 +344,8 @@ function ReadyPlanState({ onGenerate }) {
     <div className="card flex items-center justify-center text-center min-h-[420px]">
       <div className="max-w-sm">
         <div className="w-12 h-12 mx-auto rounded-full bg-success-50 text-success-700 flex items-center justify-center text-xl mb-3">✓</div>
-        <h3 className="text-base font-semibold text-ink-800">Literature check complete</h3>
-        <p className="text-sm text-slate-500 mt-1.5 leading-relaxed">
+        <h3 className="text-base font-semibold">Literature check complete</h3>
+        <p className="text-sm mt-1.5 leading-relaxed" style={{ color: 'var(--color-text-muted)' }}>
           Review the novelty signal and references on the left.
           Ready to generate the full operational plan?
         </p>
@@ -367,17 +369,17 @@ function PlanGeneratingState() {
     <div className="card min-h-[420px] flex flex-col">
       <div className="flex items-center gap-2 mb-5">
         <span className="pill-dot bg-accent-500 animate-pulse-dot" />
-        <span className="text-xs font-semibold uppercase tracking-wider text-accent-700">
+        <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--color-accent)' }}>
           Generating plan
         </span>
       </div>
-      <h3 className="text-lg font-semibold text-ink-800 mb-1">Designing your experiment</h3>
-      <p className="text-sm text-slate-500 mb-6">This usually takes 8–15 seconds.</p>
+      <h3 className="text-lg font-semibold mb-1">Designing your experiment</h3>
+      <p className="text-sm mb-6" style={{ color: 'var(--color-text-muted)' }}>This usually takes 8–15 seconds.</p>
       <ul className="space-y-3 text-sm">
         {steps.map((step, i) => (
-          <li key={i} className="flex items-start gap-3 animate-fade-in" style={{ animationDelay: `${i * 60}ms` }}>
+          <li key={i} className="flex items-start gap-3 animate-fade-in" style={{ animationDelay: `${i * 60}ms`, color: 'var(--color-text)' }}>
             <span className="mt-1.5 pill-dot bg-accent-400 animate-pulse-dot" />
-            <span className="text-slate-600">{step}</span>
+            <span>{step}</span>
           </li>
         ))}
       </ul>
@@ -387,10 +389,10 @@ function PlanGeneratingState() {
 
 function Footer() {
   return (
-    <footer className="border-t border-slate-200 bg-white mt-16">
-      <div className="max-w-6xl mx-auto px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500">
+    <footer style={{ borderTopColor: 'var(--color-border)', background: 'var(--color-bg-subtle)' }} className="border-t mt-16">
+      <div className="max-w-6xl mx-auto px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs" style={{ color: 'var(--color-text-muted)' }}>
         <p>
-          Built by <span className="font-semibold text-ink-700">GIKI University</span> · MIT Global AI Hackathon 2026 · Challenge 04: The AI Scientist
+          Built by <span className="font-semibold">GIKI University</span> · MIT Global AI Hackathon 2026 · Challenge 04: The AI Scientist
         </p>
         <p>
           Powered by Groq · Tavily · OpenAlex · Semantic Scholar

@@ -3,12 +3,13 @@
 @tailwind utilities;
 
 /* ==========================================================================
-   Base
+   Base — Light Mode (default)
    ========================================================================== */
 
-:root {
+:root, html.light {
   --color-bg: #fbfbfa;
   --color-bg-subtle: #f5f7fb;
+  --color-bg-elevated: #ffffff;
   --color-border: #e2e8f0;
   --color-border-strong: #cbd5e1;
   --color-text: #0f172a;
@@ -17,6 +18,30 @@
   --color-accent: #1d4ed8;
   --color-accent-hover: #1e3a8a;
   --color-accent-soft: #eef4ff;
+  --color-success: #16a34a;
+  --color-warning: #ea580c;
+  --color-error: #dc2626;
+}
+
+/* ==========================================================================
+   Base — Dark Mode
+   ========================================================================== */
+
+html.dark {
+  --color-bg: #0f172a;
+  --color-bg-subtle: #1a1f2e;
+  --color-bg-elevated: #1e293b;
+  --color-border: #334155;
+  --color-border-strong: #475569;
+  --color-text: #f1f5f9;
+  --color-text-muted: #cbd5e1;
+  --color-text-subtle: #94a3b8;
+  --color-accent: #3b82f6;
+  --color-accent-hover: #60a5fa;
+  --color-accent-soft: #1e3a8a;
+  --color-success: #22c55e;
+  --color-warning: #fb923c;
+  --color-error: #ef4444;
 }
 
 html, body {
@@ -53,10 +78,21 @@ html, body {
     @apply btn btn-lg bg-accent-700 text-white hover:bg-accent-800 active:bg-accent-900 shadow-sm;
   }
   .btn-secondary {
-    @apply btn btn-md bg-white text-ink-700 border border-slate-200 hover:bg-slate-50 hover:border-slate-300 shadow-sm;
+    @apply btn btn-md text-slate-700 border transition-colors;
+    background: var(--color-bg-elevated);
+    color: var(--color-text);
+    border-color: var(--color-border);
+  }
+  .btn-secondary:hover {
+    background: var(--color-bg-subtle);
+    border-color: var(--color-border-strong);
   }
   .btn-ghost {
-    @apply btn btn-md text-ink-600 hover:bg-slate-100;
+    @apply btn btn-md transition-colors;
+    color: var(--color-text-muted);
+  }
+  .btn-ghost:hover {
+    background: var(--color-bg-subtle);
   }
   .btn-danger-ghost {
     @apply btn btn-sm text-rose-700 hover:bg-rose-50;
@@ -69,7 +105,9 @@ html, body {
 
 @layer components {
   .surface {
-    @apply bg-white border border-slate-200 rounded-xl2 shadow-card;
+    background: var(--color-bg-elevated);
+    border-color: var(--color-border);
+    @apply border rounded-xl2 shadow-card;
   }
   .surface-hover {
     @apply transition-shadow hover:shadow-card-hover;
@@ -81,10 +119,12 @@ html, body {
     @apply surface p-4;
   }
   .card-section {
-    @apply border-t border-slate-100 pt-5 mt-5;
+    border-color: var(--color-border);
+    @apply border-t pt-5 mt-5;
   }
   .divider {
-    @apply h-px bg-slate-200;
+    background: var(--color-border);
+    @apply h-px;
   }
 }
 
@@ -96,11 +136,45 @@ html, body {
   .pill {
     @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border whitespace-nowrap;
   }
-  .pill-neutral { @apply pill bg-slate-50 text-slate-700 border-slate-200; }
-  .pill-accent  { @apply pill bg-accent-50 text-accent-800 border-accent-100; }
-  .pill-success { @apply pill bg-success-50 text-success-800 border-success-100; }
-  .pill-warn    { @apply pill bg-warn-50 text-warn-800 border-warn-100; }
-  .pill-danger  { @apply pill bg-danger-50 text-danger-800 border-danger-100; }
+  
+  html.light .pill-neutral { @apply pill bg-slate-50 text-slate-700 border-slate-200; }
+  html.dark .pill-neutral { 
+    @apply pill border-slate-700;
+    background: var(--color-bg-subtle);
+    color: var(--color-text-muted);
+  }
+  
+  html.light .pill-accent  { @apply pill bg-accent-50 text-accent-800 border-accent-100; }
+  html.dark .pill-accent {
+    @apply pill;
+    background: var(--color-accent-soft);
+    color: var(--color-accent-hover);
+    border-color: var(--color-accent);
+  }
+  
+  html.light .pill-success { @apply pill bg-success-50 text-success-800 border-success-100; }
+  html.dark .pill-success {
+    @apply pill;
+    background: rgba(34, 197, 94, 0.1);
+    color: var(--color-success);
+    border-color: var(--color-success);
+  }
+  
+  html.light .pill-warn    { @apply pill bg-warn-50 text-warn-800 border-warn-100; }
+  html.dark .pill-warn {
+    @apply pill;
+    background: rgba(251, 146, 60, 0.1);
+    color: var(--color-warning);
+    border-color: var(--color-warning);
+  }
+  
+  html.light .pill-danger  { @apply pill bg-danger-50 text-danger-800 border-danger-100; }
+  html.dark .pill-danger {
+    @apply pill;
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--color-error);
+    border-color: var(--color-error);
+  }
 
   .pill-dot {
     @apply inline-block w-1.5 h-1.5 rounded-full;
@@ -120,11 +194,12 @@ html, body {
 
 @layer components {
   .tab {
-    @apply relative px-4 py-3 text-sm font-medium text-slate-600 transition-colors;
-    @apply hover:text-ink-700 focus:outline-none;
+    @apply relative px-4 py-3 text-sm font-medium transition-colors;
+    @apply hover:opacity-80 focus:outline-none;
+    color: var(--color-text-muted);
   }
   .tab[aria-selected="true"] {
-    @apply text-accent-800;
+    color: var(--color-accent);
   }
   .tab[aria-selected="true"]::after {
     content: '';
@@ -134,7 +209,7 @@ html, body {
     bottom: -1px;
     height: 2px;
     border-radius: 2px;
-    background: theme('colors.accent.700');
+    background: var(--color-accent);
   }
 }
 
@@ -154,12 +229,20 @@ html, body {
   }
   .stepper-state-active   { @apply bg-accent-700 text-white border-accent-700 shadow-sm; }
   .stepper-state-done     { @apply bg-success-600 text-white border-success-600; }
-  .stepper-state-upcoming { @apply bg-white text-slate-400 border-slate-200; }
-  .stepper-label-active   { @apply text-ink-800 font-semibold; }
-  .stepper-label-done     { @apply text-success-700 font-medium; }
-  .stepper-label-upcoming { @apply text-slate-400 font-medium; }
+  .stepper-state-upcoming { 
+    background: var(--color-bg-elevated);
+    color: var(--color-text-subtle);
+    border-color: var(--color-border);
+  }
+  .stepper-label-active   { @apply font-semibold; color: var(--color-accent); }
+  .stepper-label-done     { @apply font-medium; color: var(--color-success); }
+  .stepper-label-upcoming { 
+    font-weight: 500;
+    color: var(--color-text-subtle);
+  }
   .stepper-rail {
-    @apply h-px w-8 sm:w-12 bg-slate-200 rounded;
+    @apply h-px w-8 sm:w-12 rounded;
+    background: var(--color-border);
   }
   .stepper-rail-done {
     @apply bg-success-500;
@@ -183,14 +266,42 @@ html, body {
     top: 32px;
     bottom: 0;
     width: 2px;
-    background: theme('colors.slate.200');
+    background: var(--color-border);
   }
   .protocol-step:last-child::before { display: none; }
 
   .protocol-dot {
     @apply absolute left-0 top-0 inline-flex items-center justify-center;
     @apply w-7 h-7 rounded-full bg-accent-700 text-white text-[12px] font-semibold;
-    @apply ring-4 ring-white;
+    box-shadow: 0 0 0 4px var(--color-bg-elevated);
+  }
+}
+
+/* ==========================================================================
+   Misc primitives
+   ========================================================================== */
+
+/* ==========================================================================
+   Theme Toggle
+   ========================================================================== */
+
+@layer components {
+  .theme-toggle {
+    @apply inline-flex items-center justify-center w-10 h-10 rounded-lg;
+    @apply transition-all duration-200;
+    color: var(--color-text);
+    background: var(--color-bg-subtle);
+    border: 1px solid var(--color-border);
+  }
+  .theme-toggle:hover {
+    background: var(--color-bg);
+    border-color: var(--color-border-strong);
+  }
+  .theme-toggle:active {
+    transform: scale(0.95);
+  }
+  .theme-icon {
+    @apply w-5 h-5;
   }
 }
 
@@ -201,24 +312,37 @@ html, body {
 @layer components {
   .mono {
     font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
-    @apply text-[12px] bg-slate-100 text-ink-700 px-1.5 py-0.5 rounded;
+    @apply text-[12px] px-1.5 py-0.5 rounded;
+    background: var(--color-bg-subtle);
+    color: var(--color-text);
   }
   .skeleton {
-    @apply animate-pulse bg-slate-200/80 rounded;
+    @apply animate-pulse rounded;
+    background: var(--color-bg-subtle);
   }
   .focus-ring {
-    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 focus-visible:ring-offset-2;
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500;
   }
   .input {
-    @apply w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-lg text-sm text-ink-800;
-    @apply placeholder:text-slate-400;
-    @apply focus:outline-none focus:ring-2 focus:ring-accent-500 focus:border-accent-500;
+    @apply w-full px-3.5 py-2.5 border rounded-lg text-sm;
+    background: var(--color-bg-elevated);
+    color: var(--color-text);
+    border-color: var(--color-border);
+  }
+  .input::placeholder {
+    color: var(--color-text-subtle);
+  }
+  .input:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px var(--color-accent-soft);
   }
   .textarea {
     @apply input resize-y leading-relaxed;
   }
   .label {
-    @apply block text-xs font-semibold uppercase tracking-wide text-slate-500;
+    @apply block text-xs font-semibold uppercase tracking-wide;
+    color: var(--color-text-muted);
   }
 }
 
@@ -229,13 +353,17 @@ html, body {
 @layer components {
   .toast {
     @apply fixed top-4 right-4 z-50 max-w-md animate-fade-in;
-    @apply surface px-4 py-3 flex items-start gap-3;
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    @apply px-4 py-3 flex items-start gap-3;
   }
   .toast-success {
-    @apply border-success-100 bg-success-50;
+    border-color: rgba(34, 197, 94, 0.3);
+    background: rgba(34, 197, 94, 0.1);
   }
   .toast-error {
-    @apply border-danger-100 bg-danger-50;
+    border-color: rgba(239, 68, 68, 0.3);
+    background: rgba(239, 68, 68, 0.1);
   }
 }
 

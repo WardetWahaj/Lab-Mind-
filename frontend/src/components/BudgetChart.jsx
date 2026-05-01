@@ -118,7 +118,7 @@ export default function BudgetChart({ budget }) {
   }, [budget])
 
   if (!budget) {
-    return <div className="text-slate-500 text-sm">No budget data available.</div>
+    return <div className="text-sm" style={{ color: 'var(--color-text-subtle)' }}>No budget data available.</div>
   }
 
   const hasChartJs = typeof window !== 'undefined' && !!window.Chart
@@ -131,18 +131,16 @@ export default function BudgetChart({ budget }) {
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 items-center">
         {/* Doughnut */}
         <div className="lg:col-span-2 flex items-center justify-center">
-          <div className="relative w-56 h-56 sm:w-64 sm:h-64">
-            <canvas ref={canvasRef}></canvas>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center">
-                <p className="text-[11px] uppercase tracking-wider text-slate-500 font-semibold">Total budget</p>
-                <p className="text-2xl sm:text-3xl font-bold text-ink-900 mt-0.5">
-                  ${formatUSD(total)}
-                </p>
-                {budget.currency_note && (
-                  <p className="text-[10px] text-slate-400 mt-1 max-w-[10rem] mx-auto">{budget.currency_note}</p>
-                )}
-              </div>
+          <div className="relative w-56 h-56 sm:w-64 sm:h-64 flex items-center justify-center">
+            <canvas ref={canvasRef} className="absolute inset-0"></canvas>
+            <div className="text-center max-w-[6.5rem] sm:max-w-[8.5rem] relative z-10 -mt-6">
+              <p className="text-[10px] uppercase tracking-wider font-semibold" style={{ color: 'var(--color-text-subtle)' }}>Total budget</p>
+              <p className="text-xl sm:text-2xl font-bold mt-0.5" style={{ color: 'var(--color-text)' }}>
+                ${formatUSD(total)}
+              </p>
+              {budget.currency_note && (
+                <p className="text-[9px] mt-0.5 leading-snug" style={{ color: 'var(--color-text-subtle)' }}>{budget.currency_note}</p>
+              )}
             </div>
           </div>
         </div>
@@ -154,15 +152,15 @@ export default function BudgetChart({ budget }) {
             const pct = breakdownTotal > 0 ? Math.round((amount / breakdownTotal) * 100) : 0
             const color = colorFor(item.category, index)
             return (
-              <div key={index} className="rounded-lg border border-slate-100 bg-white px-3 py-2.5">
+              <div key={index} className="rounded-lg border border-slate-100 px-3 py-2.5" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-bg-elevated)' }}>
                 <div className="flex items-center justify-between gap-3">
                   <div className="flex items-center gap-2 min-w-0">
                     <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: color }} />
-                    <span className="text-sm font-medium text-ink-800 truncate">{item.category}</span>
+                    <span className="text-sm font-medium truncate" style={{ color: 'var(--color-text-muted)' }}>{item.category}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-[11px] text-slate-500 tabular-nums">{pct}%</span>
-                    <span className="text-sm font-semibold text-ink-900 tabular-nums">${formatUSD(item.amount_usd)}</span>
+                    <span className="text-[11px] tabular-nums" style={{ color: 'var(--color-text-subtle)' }}>{pct}%</span>
+                    <span className="text-sm font-semibold tabular-nums" style={{ color: 'var(--color-text)' }}>${formatUSD(item.amount_usd)}</span>
                   </div>
                 </div>
                 <div className="mt-2 h-1.5 rounded-full bg-slate-100 overflow-hidden">
@@ -175,7 +173,7 @@ export default function BudgetChart({ budget }) {
       </div>
 
       {(chartUnavailable || !hasChartJs) && (
-        <p className="text-xs text-slate-500 italic">
+        <p className="text-xs italic" style={{ color: 'var(--color-text-subtle)' }}>
           Chart visualization unavailable; the breakdown above is fully accessible without it.
         </p>
       )}

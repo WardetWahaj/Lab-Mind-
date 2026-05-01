@@ -20,9 +20,9 @@ const SIGNAL_CONFIG = {
 }
 
 const TONE_CLASSES = {
-  success: 'border-success-200 bg-success-50',
-  warn:    'border-warn-200 bg-warn-50',
-  danger:  'border-danger-200 bg-danger-50',
+  success: 'border-success-200 dark:border-success-900 bg-success-50 dark:bg-success-900/30',
+  warn:    'border-warn-200 dark:border-warn-900 bg-warn-50 dark:bg-warn-900/30',
+  danger:  'border-danger-200 dark:border-danger-900 bg-danger-50 dark:bg-danger-900/30',
 }
 const TONE_TEXT = {
   success: 'text-success-800',
@@ -51,8 +51,8 @@ export default function LiteratureQC({ result, onGeneratePlan, isLoading, disabl
     <div className="card animate-fade-in">
       <div className="flex items-center justify-between mb-3">
         <div>
-          <h2 className="text-base font-semibold text-ink-800">Literature quality control</h2>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <h2 className="text-base font-semibold" style={{ color: 'var(--color-text)' }}>Literature quality control</h2>
+          <p className="text-xs mt-0.5" style={{ color: 'var(--color-text-subtle)' }}>
             Plagiarism check, but for science. Fast novelty signal + 1–3 references.
           </p>
         </div>
@@ -67,12 +67,12 @@ export default function LiteratureQC({ result, onGeneratePlan, isLoading, disabl
           </div>
           <div className="flex-1">
             <div className={`text-sm font-semibold ${TONE_TEXT[config.tone]}`}>{config.label}</div>
-            <p className={`text-xs mt-0.5 ${TONE_TEXT[config.tone]} opacity-90`}>
+            <p className={`text-xs mt-0.5 ${TONE_TEXT[config.tone]}`}>
               {config.summary}
             </p>
             {explanation && (
-              <p className="text-xs mt-2 text-slate-700 leading-relaxed">
-                <span className="font-semibold text-slate-600">Why:</span> {explanation}
+              <p className="text-xs mt-2 leading-relaxed" style={{ color: 'var(--color-text-muted)' }}>
+                <span className="font-semibold" style={{ color: 'var(--color-text-muted)' }}>Why:</span> {explanation}
               </p>
             )}
           </div>
@@ -92,7 +92,7 @@ export default function LiteratureQC({ result, onGeneratePlan, isLoading, disabl
               return (
                 <li
                   key={i}
-                  className="rounded-lg border border-slate-200 hover:border-slate-300 hover:shadow-card-hover transition-all bg-white"
+                  className="rounded-lg border hover:shadow-card-hover transition-all" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-bg-elevated)' }}
                 >
                   <a
                     href={ref.url || '#'}
@@ -100,10 +100,10 @@ export default function LiteratureQC({ result, onGeneratePlan, isLoading, disabl
                     rel="noopener noreferrer"
                     className="block p-3 focus-ring"
                   >
-                    <p className="text-sm font-medium text-ink-800 leading-snug line-clamp-2">
+                    <p className="text-sm font-medium leading-snug line-clamp-2" style={{ color: 'var(--color-text)' }}>
                       {ref.title || 'Untitled'}
                     </p>
-                    <p className="text-xs text-slate-500 mt-1">
+                    <p className="text-xs mt-1" style={{ color: 'var(--color-text-subtle)' }}>
                       {ref.authors || 'Unknown authors'} · {yearText}
                     </p>
                     {sourceLabel && (
@@ -117,7 +117,7 @@ export default function LiteratureQC({ result, onGeneratePlan, isLoading, disabl
             })}
           </ul>
         ) : (
-          <div className="rounded-lg border border-dashed border-slate-200 px-3 py-4 text-xs text-slate-500 text-center">
+          <div className="rounded-lg border border-dashed px-3 py-4 text-xs text-center" style={{ color: 'var(--color-text-subtle)', borderColor: 'var(--color-border)' }}>
             No references retrieved. The plan generator will still proceed.
           </div>
         )}

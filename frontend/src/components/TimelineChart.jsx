@@ -50,7 +50,7 @@ export default function TimelineChart({ timeline }) {
 
   if (!data || safeTaskList.length === 0) {
     return (
-      <div className="rounded-lg border border-dashed border-slate-200 px-4 py-6 text-center text-sm text-slate-500">
+      <div className="rounded-lg border border-dashed px-4 py-6 text-center text-sm" style={{ color: 'var(--color-text-subtle)', borderColor: 'var(--color-border)' }}>
         Timeline data unavailable for this plan.
       </div>
     )
@@ -76,11 +76,11 @@ export default function TimelineChart({ timeline }) {
           const color = getPhaseColor(phase.phase, phase.week)
           const widthPct = (phase.week / maxWeek) * 100
           return (
-            <div key={index} className="rounded-xl2 border border-slate-100 bg-white p-3 sm:p-4">
+            <div key={index} className="rounded-xl2 border p-3 sm:p-4" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-bg-elevated)' }}>
               <div className="flex items-start gap-4">
                 <div className="w-20 sm:w-24 flex-shrink-0">
-                  <p className="text-[11px] uppercase tracking-wider text-slate-400 font-semibold">Week</p>
-                  <p className="text-2xl font-bold text-ink-900 leading-none mt-0.5">{phase.week}</p>
+                  <p className="text-[11px] uppercase tracking-wider font-semibold" style={{ color: 'var(--color-text-subtle)' }}>Week</p>
+                  <p className="text-2xl font-bold leading-none mt-0.5" style={{ color: 'var(--color-text)' }}>{phase.week}</p>
                   <span
                     className="mt-1 inline-flex items-center gap-1 text-[11px] font-semibold px-1.5 py-0.5 rounded"
                     style={{ color, backgroundColor: `${color}1A` }}
@@ -98,8 +98,8 @@ export default function TimelineChart({ timeline }) {
                   {phase.tasks.length > 0 && (
                     <ul className="mt-3 space-y-1.5">
                       {phase.tasks.map((task, i) => (
-                        <li key={i} className="flex items-start gap-2 text-sm text-slate-700 leading-snug">
-                          <span className="mt-1.5 w-1 h-1 rounded-full bg-slate-400 flex-shrink-0" />
+                        <li key={i} className="flex items-start gap-2 text-sm leading-snug" style={{ color: 'var(--color-text-muted)' }}>
+                          <span className="mt-1.5 w-1 h-1 rounded-full flex-shrink-0" style={{ backgroundColor: 'var(--color-text-subtle)' }} />
                           <span>{task}</span>
                         </li>
                       ))}
@@ -111,7 +111,7 @@ export default function TimelineChart({ timeline }) {
                     </p>
                   )}
                   {phase.dependsOn.length > 0 && (
-                    <p className="text-[11px] text-slate-500 mt-1.5">
+                    <p className="text-[11px] mt-1.5" style={{ color: 'var(--color-text-subtle)' }}>
                       Depends on: Week {phase.dependsOn.join(', Week ')}
                     </p>
                   )}

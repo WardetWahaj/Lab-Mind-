@@ -9,11 +9,11 @@ export default function ProtocolCard({ protocol }) {
         <li key={index} className="protocol-step">
           <span className="protocol-dot">{step.step || index + 1}</span>
           <div>
-            <h4 className="text-sm font-semibold text-ink-900 leading-snug">
+            <h4 className="text-sm font-semibold leading-snug" style={{ color: 'var(--color-text)' }}>
               {step.title || `Step ${index + 1}`}
             </h4>
             {step.description && (
-              <p className="mt-1.5 text-sm text-slate-700 leading-relaxed">
+              <p className="mt-1.5 text-sm leading-relaxed" style={{ color: 'var(--color-text-muted)' }}>
                 {step.description}
               </p>
             )}
@@ -44,7 +44,7 @@ export default function ProtocolCard({ protocol }) {
 
 function EmptyState({ children }) {
   return (
-    <div className="rounded-lg border border-dashed border-slate-200 px-4 py-6 text-center text-sm text-slate-500">
+    <div className="rounded-lg border border-dashed px-4 py-6 text-center text-sm" style={{ color: 'var(--color-text-subtle)', borderColor: 'var(--color-border)' }}>
       {children}
     </div>
   )

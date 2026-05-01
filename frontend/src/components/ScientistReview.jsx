@@ -78,8 +78,8 @@ export default function ScientistReview({ hypothesis, onFeedbackSaved, onClose }
   return (
     <div className="space-y-5">
       <header>
-        <h2 className="text-lg font-semibold text-ink-900">Scientist review</h2>
-        <p className="text-sm text-slate-600 mt-1 leading-relaxed">
+        <h2 className="text-lg font-semibold" style={{ color: 'var(--color-text)' }}>Scientist review</h2>
+        <p className="text-sm mt-1 leading-relaxed" style={{ color: 'var(--color-text-muted)' }}>
           Rate each section and leave concrete corrections. Future plans of the
           same experiment type will reflect your corrections automatically.
         </p>
@@ -95,16 +95,16 @@ export default function ScientistReview({ hypothesis, onFeedbackSaved, onClose }
           placeholder="e.g. mouse gut microbiome, cell cryopreservation, paper biosensor…"
           className="input mt-1.5"
         />
-        <p className="text-[11px] text-slate-500 mt-1">
+        <p className="text-[11px] mt-1" style={{ color: 'var(--color-text-subtle)' }}>
           Used to retrieve this feedback the next time a similar hypothesis is submitted.
         </p>
       </div>
 
       <div className="space-y-3">
         {SECTIONS.map((section) => (
-          <div key={section.key} className="rounded-xl2 border border-slate-200 bg-white p-3.5">
+          <div key={section.key} className="rounded-xl2 border p-3.5" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-bg-elevated)' }}>
             <div className="flex items-center justify-between mb-2">
-              <label className="text-sm font-semibold text-ink-800">{section.label}</label>
+              <label className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>{section.label}</label>
               <StarRating
                 value={ratings[section.key]}
                 onChange={(v) => handleRating(section.key, v)}
@@ -166,7 +166,12 @@ function StarRating({ value, onChange }) {
             aria-checked={filled}
             aria-label={`Rate ${star} out of 5`}
             onClick={() => onChange(star)}
-            className={`p-1 rounded transition-transform hover:scale-110 focus-ring ${filled ? 'text-amber-500' : 'text-slate-300 hover:text-amber-400'}`}
+            className={`p-1 rounded transition-transform hover:scale-110 focus-ring`}
+            style={{
+              color: filled ? 'var(--color-warning, #f59e0b)' : 'var(--color-text-subtle)',
+            }}
+            onMouseEnter={(e) => { if (!filled) e.target.style.color = 'var(--color-warning, #f59e0b)' }}
+            onMouseLeave={(e) => { if (!filled) e.target.style.color = 'var(--color-text-subtle)' }}
           >
             <Star filled={filled} />
           </button>

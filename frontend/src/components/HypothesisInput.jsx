@@ -61,8 +61,8 @@ export default function HypothesisInput({ onCheckLiterature, isLoading, value, d
     <div className="card animate-fade-in">
       <div className="flex items-center justify-between mb-3">
         <div>
-          <h2 className="text-base font-semibold text-ink-800">Scientific hypothesis</h2>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <h2 className="text-base font-semibold" style={{ color: 'var(--color-text)' }}>Scientific hypothesis</h2>
+          <p className="text-xs mt-0.5" style={{ color: 'var(--color-text-subtle)' }}>
             Name a specific intervention, a measurable outcome, and a mechanism.
           </p>
         </div>
@@ -74,12 +74,12 @@ export default function HypothesisInput({ onCheckLiterature, isLoading, value, d
         onChange={(e) => setText(e.target.value)}
         disabled={disabled}
         placeholder="e.g. Replacing sucrose with trehalose as a cryoprotectant will increase post-thaw viability of HeLa cells by ≥15 percentage points compared to the standard DMSO protocol."
-        className="textarea h-36 disabled:bg-slate-50 disabled:text-slate-500"
+        className="textarea h-36 disabled:opacity-50" style={{ color: 'var(--color-text)' }}
         aria-label="Scientific hypothesis"
       />
 
       <div className="mt-2 flex items-center justify-between text-xs">
-        <span className="text-slate-400">
+        <span style={{ color: 'var(--color-text-subtle)' }}>
           {length} character{length === 1 ? '' : 's'}
         </span>
         {!isReady && (
@@ -122,7 +122,7 @@ export default function HypothesisInput({ onCheckLiterature, isLoading, value, d
                 <span className="text-xs font-semibold">{sample.title}</span>
                 <span aria-hidden="true">{sample.icon}</span>
               </div>
-              <span className="block text-[11px] mt-1 text-current/80 line-clamp-2 opacity-80">
+              <span className="block text-[11px] mt-1 text-current line-clamp-2">
                 {sample.text.split('.')[0]}.
               </span>
             </button>

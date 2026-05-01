@@ -227,15 +227,15 @@ function Header({ onStartOver, canReset }) {
           <Logo />
           <div className="leading-tight">
             <div className="text-base sm:text-lg font-bold tracking-tight">Lab Mind</div>
-            <div className="text-[11px] sm:text-xs opacity-70 font-medium">From hypothesis to runnable experiment plan</div>
+            <div className="text-[11px] sm:text-xs font-medium" style={{ color: 'var(--color-text-muted)' }}>From hypothesis to runnable experiment plan</div>
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <span className="hidden sm:inline text-[11px] opacity-70 uppercase tracking-wider">Powered by</span>
+          <span className="hidden sm:inline text-[11px] uppercase tracking-wider" style={{ color: 'var(--color-text-muted)' }}>Powered by</span>
           <span className="text-xs font-semibold">Fulcrum Science</span>
           <ThemeToggle />
           {canReset && (
-            <button onClick={onStartOver} className="ml-2 text-xs opacity-80 hover:opacity-100 border rounded-md px-3 py-1.5 transition-opacity" style={{ borderColor: 'var(--color-border)' }}>
+            <button onClick={onStartOver} className="ml-2 text-xs border rounded-md px-3 py-1.5 transition-opacity hover:opacity-100" style={{ color: 'var(--color-text-muted)', borderColor: 'var(--color-border)' }}>
               ↻ Start over
             </button>
           )}
@@ -283,7 +283,7 @@ function LearningLoopBanner() {
     <div className="hidden md:flex items-center gap-2 text-[11px]" style={{ color: 'var(--color-success)' }}>
       <span className="pill-dot bg-success-500 animate-pulse-dot" />
       <span className="font-medium">Live learning loop:</span>
-      <span style={{ color: 'var(--color-success)', opacity: 0.9 }}>Expert feedback is reused to improve the next plan.</span>
+      <span style={{ color: 'var(--color-success)' }}>Expert feedback is reused to improve the next plan.</span>
     </div>
   )
 }

@@ -88,7 +88,7 @@ export default function ExperimentPlan({ data, hypothesis, lastFeedbackApplied, 
         <div className="rounded-lg bg-warn-50 border border-warn-200 px-4 py-3 flex items-start gap-3 animate-fade-in">
           <div className="w-7 h-7 rounded-full bg-warn-100 text-warn-700 flex items-center justify-center text-sm font-bold flex-shrink-0">!</div>
           <div className="flex-1">
-            <p className="text-sm font-semibold text-warn-800">Showing a cached demo plan</p>
+            <p className="text-sm font-semibold" style={{ color: 'var(--color-warning)' }}>Showing a cached demo plan</p>
             <p className="text-xs text-warn-700 mt-1 leading-relaxed">
               Live plan generation hit a provider limit (likely Groq daily quota).
               We picked the most topically relevant cached example instead. Click <span className="font-semibold">Start over</span> in a few minutes to retry a fresh generation.
@@ -105,8 +105,8 @@ export default function ExperimentPlan({ data, hypothesis, lastFeedbackApplied, 
               <span className="pill-dot bg-success-500" />
               Plan ready
             </span>
-            <h2 className="text-lg font-semibold text-ink-900 leading-tight">Experiment plan</h2>
-            <p className="text-xs text-slate-500 mt-1 max-w-xl line-clamp-2">{hypothesis}</p>
+            <h2 className="text-lg font-semibold leading-tight" style={{ color: 'var(--color-text)' }}>Experiment plan</h2>
+            <p className="text-xs mt-1 max-w-xl line-clamp-2" style={{ color: 'var(--color-text-subtle)' }}>{hypothesis}</p>
           </div>
           <div className="flex items-center gap-2 no-print">
             <button onClick={handlePrint} className="btn-secondary">
@@ -198,10 +198,10 @@ export default function ExperimentPlan({ data, hypothesis, lastFeedbackApplied, 
 
 function KpiCard({ label, value, sub }) {
   return (
-    <div className="rounded-lg border border-slate-100 bg-slate-50/60 px-3 py-2.5">
+    <div className="rounded-lg border px-3 py-2.5" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-bg-elevated)' }}>
       <p className="label">{label}</p>
-      <p className="text-lg font-semibold text-ink-900 mt-0.5">{value}</p>
-      <p className="text-[11px] text-slate-500">{sub}</p>
+      <p className="text-lg font-semibold mt-0.5" style={{ color: 'var(--color-text)' }}>{value}</p>
+      <p className="text-[11px]" style={{ color: 'var(--color-text-subtle)' }}>{sub}</p>
     </div>
   )
 }
@@ -209,8 +209,8 @@ function KpiCard({ label, value, sub }) {
 function TabHeader({ title, description }) {
   return (
     <div className="mb-5">
-      <h3 className="text-base font-semibold text-ink-900">{title}</h3>
-      <p className="text-xs text-slate-500 mt-0.5">{description}</p>
+      <h3 className="text-base font-semibold" style={{ color: 'var(--color-text)' }}>{title}</h3>
+      <p className="text-xs mt-0.5" style={{ color: 'var(--color-text-subtle)' }}>{description}</p>
     </div>
   )
 }
@@ -224,10 +224,10 @@ function ReviewSlideOver({ children, onClose }) {
       />
       <div className="absolute right-0 top-0 bottom-0 w-full max-w-xl bg-paper shadow-lift overflow-y-auto thin-scroll animate-fade-in">
         <div className="sticky top-0 bg-paper/95 backdrop-blur border-b border-slate-200 px-5 py-3 flex items-center justify-between">
-          <h3 className="text-sm font-semibold text-ink-900">Expert review</h3>
+          <h3 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>Expert review</h3>
           <button
             onClick={onClose}
-            className="text-slate-500 hover:text-ink-900 px-2 py-1 rounded-md hover:bg-slate-100"
+            className="px-2 py-1 rounded-md transition-colors" style={{ color: 'var(--color-text-muted)', backgroundColor: 'var(--color-bg-subtle)' }}
             aria-label="Close review"
           >
             ✕

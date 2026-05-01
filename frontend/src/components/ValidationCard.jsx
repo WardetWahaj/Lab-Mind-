@@ -1,7 +1,7 @@
 export default function ValidationCard({ validation }) {
   if (!validation) {
     return (
-      <div className="rounded-lg border border-dashed border-slate-200 px-4 py-6 text-center text-sm text-slate-500">
+      <div className="rounded-lg border border-dashed px-4 py-6 text-center text-sm" style={{ color: 'var(--color-text-subtle)', borderColor: 'var(--color-border)' }}>
         No validation data available.
       </div>
     )
@@ -33,7 +33,7 @@ export default function ValidationCard({ validation }) {
             href={getReportingStandardLink(validation.reporting_standard)}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm font-semibold text-accent-800 hover:text-accent-900 mt-0.5 inline-flex items-center gap-1.5"
+            className="text-sm" style={{ color: 'var(--color-accent)', cursor: 'pointer' }}
           >
             {validation.reporting_standard}
             <ExternalIcon />
@@ -46,20 +46,20 @@ export default function ValidationCard({ validation }) {
 
 function ValidationField({ title, value, icon: Icon, tone }) {
   const toneClasses = {
-    accent:  'bg-accent-50 text-accent-700',
-    success: 'bg-success-50 text-success-700',
-    danger:  'bg-danger-50 text-danger-700',
-    neutral: 'bg-slate-50 text-slate-600',
+    accent:  'bg-accent-50 dark:bg-accent-900/30 text-accent-700 dark:text-accent-400',
+    success: 'bg-success-50 dark:bg-success-900/30 text-success-700 dark:text-success-400',
+    danger:  'bg-danger-50 dark:bg-danger-900/30 text-danger-700 dark:text-danger-400',
+    neutral: 'bg-slate-50 dark:bg-slate-900/40 dark:text-slate-300',
   }
   return (
-    <div className="rounded-xl2 border border-slate-100 bg-white p-3.5">
+    <div className="rounded-xl2 border p-3.5" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-bg-elevated)' }}>
       <div className="flex items-start gap-3">
         <span className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 ${toneClasses[tone] || toneClasses.neutral}`}>
           <Icon />
         </span>
         <div className="flex-1 min-w-0">
           <p className="label">{title}</p>
-          <p className="text-sm text-ink-800 leading-snug mt-1">{value}</p>
+          <p className="text-sm leading-snug mt-1" style={{ color: 'var(--color-text-muted)' }}>{value}</p>
         </div>
       </div>
     </div>

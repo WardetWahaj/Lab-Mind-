@@ -57,6 +57,51 @@ html, body {
   font-family: inherit;
 }
 
+/* Dark mode color overrides for semantic colors */
+html.dark {
+  --tw-text-success-800: #86efac;
+  --tw-text-warn-800: #fbbf24;
+  --tw-text-danger-800: #f87171;
+  --tw-text-accent-800: #93c5fd;
+  --tw-text-accent-900: #bfdbfe;
+  
+  --tw-bg-success-50: #064e3b;
+  --tw-bg-success-100: #0d6e4f;
+  --tw-bg-warn-50: #78350f;
+  --tw-bg-warn-100: #92400e;
+  --tw-bg-danger-50: #7f1d1d;
+  --tw-bg-danger-100: #991b1b;
+  --tw-bg-accent-50: #082f4f;
+  --tw-bg-accent-100: #0c3a5c;
+}
+
+html.dark .text-success-800 { color: #86efac !important; }
+html.dark .text-warn-800 { color: #fbbf24 !important; }
+html.dark .text-danger-800 { color: #f87171 !important; }
+html.dark .text-accent-800 { color: #93c5fd !important; }
+html.dark .text-accent-900 { color: #bfdbfe !important; }
+html.dark .text-success-700 { color: #4ade80 !important; }
+html.dark .text-warn-700 { color: #fcd34d !important; }
+html.dark .text-danger-700 { color: #fb7185 !important; }
+
+html.dark .bg-success-50 { background-color: #064e3b !important; }
+html.dark .bg-success-100 { background-color: #0d6e4f !important; }
+html.dark .bg-warn-50 { background-color: #78350f !important; }
+html.dark .bg-warn-100 { background-color: #92400e !important; }
+html.dark .bg-danger-50 { background-color: #7f1d1d !important; }
+html.dark .bg-danger-100 { background-color: #991b1b !important; }
+html.dark .bg-accent-50 { background-color: #082f4f !important; }
+html.dark .bg-accent-100 { background-color: #0c3a5c !important; }
+
+html.dark .border-success-100 { border-color: #0d6e4f !important; }
+html.dark .border-success-200 { border-color: #166534 !important; }
+html.dark .border-warn-100 { border-color: #92400e !important; }
+html.dark .border-warn-200 { border-color: #a16207 !important; }
+html.dark .border-danger-100 { border-color: #991b1b !important; }
+html.dark .border-danger-200 { border-color: #dc2626 !important; }
+html.dark .border-accent-100 { border-color: #0c3a5c !important; }
+html.dark .border-accent-200 { border-color: #1e40af !important; }
+
 /* ==========================================================================
    Buttons
    ========================================================================== */
@@ -78,7 +123,7 @@ html, body {
     @apply btn btn-lg bg-accent-700 text-white hover:bg-accent-800 active:bg-accent-900 shadow-sm;
   }
   .btn-secondary {
-    @apply btn btn-md text-slate-700 border transition-colors;
+    @apply btn btn-md border transition-colors;
     background: var(--color-bg-elevated);
     color: var(--color-text);
     border-color: var(--color-border);
@@ -137,11 +182,16 @@ html, body {
     @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border whitespace-nowrap;
   }
   
-  html.light .pill-neutral { @apply pill bg-slate-50 text-slate-700 border-slate-200; }
+  html.light .pill-neutral { 
+    @apply pill border-slate-200;
+    background: #f8fafc;
+    color: #334155;
+  }
   html.dark .pill-neutral { 
-    @apply pill border-slate-700;
+    @apply pill;
     background: var(--color-bg-subtle);
     color: var(--color-text-muted);
+    border-color: var(--color-border);
   }
   
   html.light .pill-accent  { @apply pill bg-accent-50 text-accent-800 border-accent-100; }

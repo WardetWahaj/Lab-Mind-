@@ -137,7 +137,7 @@ ai-scientist-main - Copy/
     ├── tailwind.config.js          ← Custom design tokens (ink / accent / signal palettes)
     ├── postcss.config.js
     ├── vite.config.js              ← dev server + /api proxy
-    ├── .env.example                ← VITE_API_BASE_URL
+    ├── .env.example                ← VITE_API_URL
     └── src/
         ├── main.jsx                ← React root
         ├── App.jsx                 ← state machine: idle → qc_running → qc_done →
@@ -234,7 +234,7 @@ npm run preview    # serves dist/ locally for QA
 
 | Variable | Purpose | Default |
 |----------|---------|---------|
-| `VITE_API_BASE_URL` | Override backend base URL. | `http://localhost:8000` |
+| `VITE_API_URL` | Override backend base URL. | `http://localhost:8000` |
 
 ---
 
@@ -391,7 +391,7 @@ Print stylesheet (`@media print`) hides tabs, reveals all panels, drops the slid
 
 ## 9) API reference
 
-Base URL: `http://localhost:8000` (override with `VITE_API_BASE_URL`).
+Base URL: `http://localhost:8000` (override with `VITE_API_URL`).
 
 ### `GET /api/health`
 ```json
@@ -653,9 +653,11 @@ The project is pre-configured for a **split deploy**:
 - **Backend** → [Render](https://render.com) (FastAPI, Python 3.11)
 - **Frontend** → [Netlify](https://netlify.com) (Vite static build)
 
-The repo ships everything Render needs to deploy the backend with zero manual config beyond setting your secrets.
+The repo ships everything Render needs to deploy the backend and Netlify needs to deploy the frontend with zero manual config beyond setting your secrets.
 
-### Files included for Render
+> **For step-by-step instructions**, see [NETLIFY_DEPLOYMENT_GUIDE.md](NETLIFY_DEPLOYMENT_GUIDE.md).
+
+### Files included for backend (Render)
 
 | File | Purpose |
 |------|---------|
@@ -663,6 +665,14 @@ The repo ships everything Render needs to deploy the backend with zero manual co
 | `backend/runtime.txt` | Pins Python to `3.11.9` so builds are reproducible. |
 | `backend/Procfile` | Fallback start command for non-Blueprint deploys (manual web service). |
 | `backend/requirements.txt` | Python deps. |
+
+### Files included for frontend (Netlify)
+
+| File | Purpose |
+|------|---------|
+| `netlify.toml` | Netlify configuration — specifies build command, publish directory, redirects for SPA routing, and environment variable setup. |
+| `frontend/.netlify/functions/api.js` | Serverless function that proxies API requests to your backend (optional, for advanced setups). |
+| `frontend/.env.example` | Environment variables template for frontend. Copy to `.env.local` and set `VITE_API_URL` to your backend URL. |
 
 The `main.py` entrypoint reads `PORT`, `ENV`, `RELOAD`, and `CORS_ALLOW_ORIGINS` from environment, so the same code runs in dev and production unchanged.
 
@@ -698,12 +708,41 @@ If you'd rather wire it up by hand:
 
 The included `backend/Procfile` works as a fallback start command if you ever forget to set the field.
 
-### 17.3 Wire your Netlify frontend to the Render backend
+### 17.3 Deploy the frontend on Netlify
+
+**Recommended: GitHub integration**
+
+1. Push this repo to GitHub (private is fine).
+2. Log in to [Netlify](https://netlify.com).
+3. Click **Add new site** → **Import an existing project**.
+4. Select **GitHub** and choose this repository.
+5. Configure the build settings:
+   - **Build Command:** `cd frontend && npm install && npm run build`
+   - **Publish Directory:** `frontend/dist`
+6. Click **Deploy site**.
+7. After the initial deploy, go to **Site configuration → Environment variables** and add:
+
+   | Key | Value |
+   |-----|-------|
+   | `VITE_API_URL` | `https://your-backend-url.onrender.com` (or your Render backend URL) |
+
+8. Trigger a **Manual Deploy** → **Clear cache and build site** to rebuild with the new env var.
+
+**Alternative: Drag & drop**
+
+1. Build locally:
+   ```bash
+   cd frontend && npm install && npm run build
+   ```
+2. Drag the `frontend/dist` folder into the Netlify dashboard.
+3. Still need to set `VITE_API_URL` in Netlify's environment variables afterward.
+
+### 17.4 Wire your Netlify frontend to the Render backend
 
 On Netlify, open your site → **Site configuration → Environment variables** and add:
 
 ```
-VITE_API_BASE_URL=https://ai-scientist-os-backend.onrender.com
+VITE_API_URL=https://ai-scientist-os-backend.onrender.com
 ```
 
 Then trigger a new deploy (Netlify → **Deploys → Trigger deploy → Clear cache and deploy site**) so Vite picks up the new env var. Vite **bakes env vars at build time**, so a redeploy is required — runtime updates won't help.
@@ -713,14 +752,14 @@ After the rebuild, the Netlify-hosted UI will start hitting your Render backend.
 1. Open your Netlify URL → DevTools → Network tab.
 2. Submit a hypothesis. The `literature-qc` and `generate-plan` requests should fire against `https://ai-scientist-os-backend.onrender.com`, **not** `localhost`.
 
-### 17.4 Things to know about Render's free tier
+### 17.5 Things to know about Render's free tier
 
-- **Cold starts (mitigated).** The free instance normally sleeps after ~15 minutes of inactivity, and the first request after sleep takes 30–50 s. **The backend ships with a built-in keep-alive loop that self-pings `RENDER_EXTERNAL_URL/api/health` every 10 minutes**, so the instance never goes idle once it's awake. Render auto-injects `RENDER_EXTERNAL_URL` for you — no extra config needed. See [§17.5](#175-built-in-keep-alive-anti-sleep-loop) below for full details and how to tune or disable it.
+- **Cold starts (mitigated).** The free instance normally sleeps after ~15 minutes of inactivity, and the first request after sleep takes 30–50 s. **The backend ships with a built-in keep-alive loop that self-pings `RENDER_EXTERNAL_URL/api/health` every 10 minutes**, so the instance never goes idle once it's awake. Render auto-injects `RENDER_EXTERNAL_URL` for you — no extra config needed. See [§17.6](#176-built-in-keep-alive-anti-sleep-loop) below for full details and how to tune or disable it.
 - **Ephemeral filesystem.** Anything written to disk at runtime is lost on every redeploy and after ~24 h of idle. This means **`feedback_store.json` is not durable on Render's free plan** — feedback survives within a single container lifecycle but resets on redeploys/sleep. For hackathon demos this is fine; for production swap to a Render Postgres database or attach a Render Disk (paid).
 - **One worker.** The start command pins `--workers 1` because the free plan has 512 MB RAM. FastAPI is async so a single worker easily handles dozens of concurrent users.
 - **Region.** `render.yaml` sets `region: oregon`. Change to `frankfurt` / `singapore` / `ohio` if you want lower latency to your audience.
 
-### 17.5 Built-in keep-alive (anti-sleep) loop
+### 17.6 Built-in keep-alive (anti-sleep) loop
 
 To survive Render's free-tier 15-minute idle sleep, the backend includes a **self-ping loop** that runs as a FastAPI lifespan background task. Every 10 minutes (configurable) it `GET`s `RENDER_EXTERNAL_URL/api/health`, which counts as live traffic to the Render load balancer and resets the inactivity timer — so the dyno never goes idle.
 
@@ -760,7 +799,7 @@ keep-alive: ping https://ai-scientist-os-backend.onrender.com/api/health -> 200
 
 The internal loop dies when the container dies, so it can't *wake* a service that's already asleep — it can only *keep* an awake one awake. If your service is left alone for hours/days (e.g. overnight before demo day), the first organic visitor still pays a cold-start cost. For belt-and-braces uptime, set up a free external monitor (UptimeRobot, cron-job.org, or BetterStack) hitting `/api/health` every 5 minutes — that guarantees the service is awake even after a deploy or crash recovery. Use the internal loop for steady-state and the external pinger for resilience.
 
-### 17.6 Lock down CORS for production
+### 17.7 Lock down CORS for production
 
 The dev default in `main.py` is `allow_origins=["*"]`. In production, set `CORS_ALLOW_ORIGINS` to the **exact** Netlify URL (no trailing slash). Multiple origins are comma-separated:
 
@@ -770,7 +809,7 @@ CORS_ALLOW_ORIGINS=https://aiscientist.netlify.app,https://aiscientist.com
 
 The backend logs the resolved CORS allowlist on startup, so you can confirm the value loaded correctly by checking Render's **Logs** tab right after a deploy.
 
-### 17.7 Smoke test the deployed backend
+### 17.8 Smoke test the deployed backend
 
 ```bash
 # 1) Health
@@ -800,10 +839,10 @@ If `/api/health` works but the others time out, your Groq key or Tavily key is m
 | Lit QC returns `not_found` for a clearly published topic | All 3 search backends rate-limited or down. | Re-run; check Tavily / OpenAlex status. |
 | Stale Python process holding port 8000 (Windows) | Previous backend wasn't terminated. | `Get-Process python* \| Stop-Process -Force` then re-run `python main.py`. |
 | `model_decommissioned` warnings in the log | Groq retired a model in your fallback chain. | The chain self-heals automatically — the warning is informational. To silence it, update `GROQ_FALLBACK_MODELS` in `.env`. |
-| Frontend can't reach backend | Wrong `VITE_API_BASE_URL`. | Either start backend on 8000 or set `VITE_API_BASE_URL` in `frontend/.env` (or in Netlify's env panel for production), then **redeploy**. |
+| Frontend can't reach backend | Wrong `VITE_API_URL`. | Either start backend on 8000 or set `VITE_API_URL` in `frontend/.env` (or in Netlify's env panel for production), then **redeploy**. |
 | CORS error from the Netlify domain → Render backend | `CORS_ALLOW_ORIGINS` on Render doesn't match the exact Netlify URL. | Set `CORS_ALLOW_ORIGINS=https://your-app.netlify.app` (no trailing slash) on Render and redeploy. |
 | First request after demo idle takes 40+ seconds | Render free-plan cold start. | Either upgrade to a paid plan, or hit `/api/health` ~60 s before going on stage. |
-| `feedback_store.json` empty after a redeploy | Render's free filesystem is ephemeral. | Move to Render Postgres / Disk for persistence (see §17.4). |
+| `feedback_store.json` empty after a redeploy | Render's free filesystem is ephemeral. | Move to Render Postgres / Disk for persistence (see §17.5). |
 
 ---
 
